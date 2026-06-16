@@ -8,7 +8,7 @@ window.JC_SUPABASE_CONFIG = {
   // Não é necessário publicar seu nome ou e-mail administrativo aqui.
   adminUsername: '',
   adminEmail: '',
-  panelUrl: 'https://joaojmuniz19.github.io/Painel-JC-APK-TV/geradores/3.1.2.0/',
+  panelUrl: 'https://joaojmuniz19.github.io/Painel-JC-APK-TV/geradores/',
   attendantUrl: 'https://joaojmuniz19.github.io/autoatendimento/',
   testUsername: 'teste',
   testPassword: 'teste',
