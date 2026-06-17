@@ -496,6 +496,44 @@
     .field label{font-size:12px;color:var(--muted);font-weight:700}
     .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
     .notice{padding:12px 14px;border-radius:12px;background:rgba(77,163,255,.08);border:1px solid rgba(77,163,255,.23);color:#cbe4ff;font-size:13px;line-height:1.5;margin-bottom:15px}
+    .settings-sections{display:grid;gap:12px}
+    .settings-section{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);overflow:hidden}
+    .settings-section[open]{background:rgba(255,255,255,.035);box-shadow:0 12px 28px rgba(0,0,0,.12)}
+    .settings-section>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;padding:15px 17px;font-weight:900;color:#fff;background:rgba(255,255,255,.025);user-select:none}
+    .settings-section>summary::-webkit-details-marker{display:none}
+    .settings-section>summary::after{content:"＋";margin-left:auto;color:var(--green);font-size:19px;line-height:1}
+    .settings-section[open]>summary::after{content:"−"}
+    .settings-section>summary small{font-weight:600;color:var(--muted);font-size:11px}
+    .settings-section-body{padding:16px}
+    .settings-section-note{padding:10px 12px;margin:0 0 14px;border-radius:11px;background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.18);color:#ccebd8;font-size:12px;line-height:1.45}
+    .settings-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+    .settings-fields .field-wide{grid-column:1/-1}
+    .settings-mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .settings-subtitle{grid-column:1/-1;margin:4px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line);font-weight:900;color:#e9f3f7;font-size:13px}
+    .settings-toggle-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .settings-toggle-row{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.13)}
+    .settings-toggle-copy{min-width:0;flex:1}
+    .settings-toggle-copy strong{display:block;font-size:13px;color:#fff;margin-bottom:3px}
+    .settings-toggle-copy span{display:block;font-size:11px;color:var(--muted);line-height:1.35}
+    .settings-switch{position:relative;width:50px;height:28px;flex:0 0 auto}
+    .settings-switch input{position:absolute;opacity:0;pointer-events:none}
+    .settings-switch-track{position:absolute;inset:0;border-radius:999px;background:#364550;border:1px solid rgba(255,255,255,.12);transition:.2s}
+    .settings-switch-track::after{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 2px 7px rgba(0,0,0,.35);transition:.2s}
+    .settings-switch input:checked+.settings-switch-track{background:var(--green-dark);border-color:rgba(37,211,102,.65)}
+    .settings-switch input:checked+.settings-switch-track::after{transform:translateX(22px)}
+    .settings-switch-state{display:block;text-align:center;font-size:0;font-weight:900;margin-top:31px;color:var(--muted);white-space:nowrap}
+    .settings-switch-state::before{content:"DESATIVADO";font-size:9px}
+    .settings-switch input:checked~.settings-switch-state{color:#77e7a1}
+    .settings-switch input:checked~.settings-switch-state::before{content:"ATIVADO"}
+    .settings-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+    .settings-toolbar button{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:#172731;color:#fff;font-weight:800;cursor:pointer}
+    .settings-toolbar button:hover{border-color:rgba(37,211,102,.6)}
+    .box-config-card{padding:13px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.13)}
+    .box-config-card .field:last-child{margin-bottom:0}
+    .settings-actions-sticky{position:sticky;bottom:0;z-index:4;display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;padding:12px;border:1px solid rgba(37,211,102,.25);border-radius:14px;background:rgba(7,17,24,.94);backdrop-filter:blur(12px)}
+    .settings-actions-sticky .primary-btn{flex:1;min-width:210px}
+    .settings-actions-sticky .danger-btn{min-width:190px}
+    .setting-status-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.22);color:#83e9a8;font-size:10px;font-weight:900}
     .toast{position:fixed;right:18px;bottom:18px;z-index:200;padding:12px 15px;background:#1c2c35;color:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
     .toast.show{opacity:1;transform:translateY(0)}
 
@@ -532,6 +570,12 @@
       .reseller-card{padding:14px}
       .sidebar{grid-template-columns:1fr}
       .settings-grid{grid-template-columns:1fr}
+      .settings-fields,.settings-toggle-list,.settings-mini-grid{grid-template-columns:1fr}
+      .settings-section>summary{padding:14px}
+      .settings-section>summary small{display:none}
+      .settings-section-body{padding:13px}
+      .settings-actions-sticky{padding:10px}
+      .settings-actions-sticky .primary-btn,.settings-actions-sticky .danger-btn{width:100%;min-width:0}
       .modal{padding:6px}
       .admin-shell{max-height:98vh;border-radius:16px}
     }
@@ -1126,7 +1170,6 @@
         </div>
         <button class="send" id="sendBtn" aria-label="Enviar">➤</button>
       </div>
-      <div class="developer-signature" id="developerSignature"></div>
     </section>
 
     <aside class="sidebar">
@@ -1164,7 +1207,7 @@
     <div class="admin-head">
       <div>
         <h2>Painel do administrador</h2>
-        <div style="font-size:12px;color:var(--muted);margin-top:3px">As alterações ficam salvas neste navegador.</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">As alterações ficam organizadas por seção e são publicadas pelo sistema da atendente.</div>
       </div>
       <button class="icon-btn" id="closeAdmin">✕</button>
     </div>
@@ -1180,324 +1223,196 @@
       </div>
 
       <div class="admin-panel" id="panel-settings">
-        <div class="notice">Configure aqui os dados do atendimento. As configurações ficam salvas somente neste navegador. Para confirmação automática de PIX e liberação automática do código em aparelhos diferentes, será necessário conectar um servidor e uma API de pagamento.</div>
-        <div class="settings-grid">
-          <div>
-            <div class="field">
-              <label>Nome exibido</label>
-              <input id="settingBrand" type="text">
-            </div>
-            <div class="field">
-              <label>Logo da marca — link da imagem</label>
-              <input id="settingLogoUrl" type="url" placeholder="https://.../logo.png">
-              <span class="settings-help">Cole o link direto da imagem da logo.</span>
-              <div class="logo-preview-box" id="brandLogoPreview">Usando a logo padrão atual.</div>
-            </div>
-            <div class="field">
-              <label>Número do WhatsApp com país e DDD, somente números</label>
-              <input id="settingWhatsapp" type="text" inputmode="numeric">
-            </div>
-            <div class="field">
-              <label>Chave PIX para os pagamentos</label>
-              <input id="settingPixKey" type="text" placeholder="CPF, CNPJ, telefone, e-mail ou chave aleatória">
-            </div>
-            <div class="field">
-              <label>Nome do recebedor do PIX</label>
-              <input id="settingPixReceiver" type="text" placeholder="Nome que aparecerá para o cliente">
-            </div>
-            <div class="field">
-              <label>Banco do PIX</label>
-              <input id="settingPixBank" type="text" placeholder="Exemplo: Nubank, Mercado Pago ou Banco do Brasil">
-            </div>
-            <div class="field">
-              <label>Valor de cada conta adicional</label>
-              <input id="settingExtraAccountPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Exemplo: 50">
-            </div>
-            <div class="notice"><strong>Valores dos planos</strong><br>Altere os preços abaixo e salve. Os novos valores passam a aparecer automaticamente no atendimento.</div>
-            <div class="field">
-              <label>Plano pessoal — 1 aparelho</label>
-              <input id="settingPersonalPrice1" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Plano pessoal — 2 contas / 2 aparelhos</label>
-              <input id="settingPersonalPrice2" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Plano pessoal — 5 aparelhos</label>
-              <input id="settingPersonalPrice5" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Desconto por seguir os canais</label>
-              <div class="inline-check"><input id="settingDiscountEnabled" type="checkbox"><span>Ativar desconto</span></div>
-            </div>
-            <div class="field">
-              <label>Valor do desconto</label>
-              <input id="settingDiscountAmount" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Ajuda para configurar emulador</label>
-              <input id="settingEmulatorFee" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Mensalidade do painel de revenda</label>
-              <input id="settingResellerMonthlyFee" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Revenda 1.0.0.0 — Básico</label>
-              <input id="settingResellerPrice1000" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Revenda 1.2.0.3 — Básico Plus</label>
-              <input id="settingResellerPrice1203" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Revenda 2.1.1.0 — Avançado</label>
-              <input id="settingResellerPrice2110" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Revenda 3.0.2.0 — Ativador 16</label>
-              <input id="settingResellerPrice3020" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Revenda 3.1.1.0 — Completo</label>
-              <input id="settingResellerPrice3110" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>Revenda 3.1.2.0 — Mais completo</label>
-              <input id="settingResellerPrice3120" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>MacroDroid — Básico / Manual</label>
-              <input id="settingMacroManualPrice" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label>MacroDroid — Automático</label>
-              <input id="settingMacroAutoPrice" type="number" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="notice"><strong>Central de TV Box</strong><br>Cadastre até 3 opções de box. Se apenas uma estiver ativa, somente ela aparecerá no atendimento.</div>
-            <div class="field">
-              <label>Taxa base do cartão (%)</label>
-              <input id="settingCardBaseFee" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Exemplo: 5,31">
-              <span class="settings-help">Essa taxa é usada no cálculo para o valor final do cartão.</span>
-            </div>
-            <div class="field">
-              <label>Taxas adicionais do parcelamento no cartão — 1x até 12x (%)</label>
-              <textarea id="settingCardFeesText" rows="2" placeholder="0, 6,45, 8,67, 10,89..."></textarea>
-              <span class="settings-help">Digite 12 valores separados por vírgula, na ordem 1x, 2x, 3x... até 12x.</span>
-            </div>
-            <div class="field">
-              <label>Box 1</label>
-              <div class="inline-check"><input id="settingBox1Enabled" type="checkbox"><span>Ativar esta opção</span></div>
-              <input id="settingBox1Name" type="text" placeholder="Nome / marca do box">
-              <input id="settingBox1Description" type="text" placeholder="Descrição curta (opcional)">
-              <input id="settingBox1Price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Valor no PIX">
-            </div>
-            <div class="field">
-              <label>Box 2</label>
-              <div class="inline-check"><input id="settingBox2Enabled" type="checkbox"><span>Ativar esta opção</span></div>
-              <input id="settingBox2Name" type="text" placeholder="Nome / marca do box">
-              <input id="settingBox2Description" type="text" placeholder="Descrição curta (opcional)">
-              <input id="settingBox2Price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Valor no PIX">
-            </div>
-            <div class="field">
-              <label>Box 3</label>
-              <div class="inline-check"><input id="settingBox3Enabled" type="checkbox"><span>Ativar esta opção</span></div>
-              <input id="settingBox3Name" type="text" placeholder="Nome / marca do box">
-              <input id="settingBox3Description" type="text" placeholder="Descrição curta (opcional)">
-              <input id="settingBox3Price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Valor no PIX">
-            </div>
-            <div class="field">
-              <label>Código ou link de download para enviar após confirmar o pagamento</label>
-              <textarea id="settingDownloadCode" rows="3" placeholder="Uso interno. Este conteúdo não será mostrado automaticamente antes da confirmação."></textarea>
-              <span class="settings-help">No GitHub Pages o pagamento não pode ser confirmado automaticamente. Após conferir o PIX no WhatsApp, copie este código e envie ao cliente.</span>
-            </div>
-            <div class="field">
-              <label>Link do teste / avaliação</label>
-              <input id="settingTestLink" type="url" placeholder="https://...">
-            </div>
-            <div class="field">
-              <label>Código do teste</label>
-              <textarea id="settingTestCode" rows="3" placeholder="Código que será mostrado ou copiado na parte de teste"></textarea>
-            </div>
-            <div class="field">
-              <label>Imagem do teste — link da imagem</label>
-              <input id="settingTestImage" type="url" placeholder="https://.../imagem.png">
-              <span class="settings-help">Cole o link direto da imagem que aparecerá na parte de teste.</span>
-              <div class="test-image-preview" id="testImagePreview">Nenhuma imagem de teste configurada.</div>
-            </div>
-            <div class="field">
-              <label>Links dos canais do YouTube para o cliente seguir</label>
-              <div class="channel-settings-grid">
-                <div class="channel-setting-item">
-                  <label for="settingChannelUrl1">Canal principal</label>
-                  <input id="settingChannelUrl1" type="url" placeholder="Cole o link do Canal principal">
+        <div class="notice"><strong>Configurações da Atendente Virtual</strong><br>As mesmas funções foram organizadas por assunto. Abra somente o bloco que deseja alterar e clique em <strong>Salvar configurações</strong> no final.</div>
+
+        <div class="settings-sections" id="settingsSections">
+          <details class="settings-section" open>
+            <summary>👩‍💼 Identidade e apresentação <small>Logo, nome, mídia, mensagem e WhatsApp</small></summary>
+            <div class="settings-section-body">
+              <div class="settings-section-note">Tudo que apresenta a atendente ao cliente fica reunido aqui.</div>
+              <div class="settings-fields">
+                <div class="field">
+                  <label>Nome exibido da marca</label>
+                  <input id="settingBrand" type="text">
                 </div>
-                <div class="channel-setting-item">
-                  <label for="settingChannelUrl2">Canal CH-IPTV</label>
-                  <input id="settingChannelUrl2" type="url" placeholder="Cole o link do Canal CH-IPTV">
+                <div class="field">
+                  <label>Nome da atendente virtual</label>
+                  <input id="settingAssistantName" type="text" maxlength="40" placeholder="Exemplo: Mila, Ana ou Júlia">
+                  <span class="settings-help">Aparece no cabeçalho e na apresentação.</span>
                 </div>
-                <div class="channel-setting-item">
-                  <label for="settingChannelUrl3">JC-APK TV</label>
-                  <input id="settingChannelUrl3" type="url" placeholder="Cole o link do canal JC-APK TV">
+                <div class="field">
+                  <label>Logo da marca — link da imagem</label>
+                  <input id="settingLogoUrl" type="url" placeholder="https://.../logo.png">
+                  <span class="settings-help">Cole o link direto da imagem.</span>
+                  <div class="logo-preview-box" id="brandLogoPreview">Usando a logo padrão atual.</div>
                 </div>
-                <div class="channel-setting-item">
-                  <label for="settingChannelUrl4">JC-APK OFERTAS</label>
-                  <input id="settingChannelUrl4" type="url" placeholder="Cole o link do canal JC-APK OFERTAS">
-                </div>
-                <div class="channel-setting-item">
-                  <label>Canal adicional 5</label>
-                  <div class="channel-setting-pair">
-                    <input id="settingChannelName5" type="text" placeholder="Nome que aparecerá para o cliente">
-                    <input id="settingChannelUrl5" type="url" placeholder="Cole o link do canal">
+                <div class="field">
+                  <label>Foto ou vídeo da atendente</label>
+                  <div class="assistant-media-picker">
+                    <input id="settingAssistantMedia" type="file" accept="image/png,image/jpeg,image/webp,image/gif,video/mp4,video/webm">
+                    <div class="assistant-media-preview" id="assistantMediaPreview">Usando o vídeo original da Mila.</div>
+                    <div class="assistant-media-actions"><button class="ghost-btn" id="removeAssistantMedia" type="button">Remover mídia personalizada</button></div>
                   </div>
+                  <span class="settings-help">Imagem ou vídeo de até 2 MB.</span>
                 </div>
-                <div class="channel-setting-item">
-                  <label>Canal adicional 6</label>
-                  <div class="channel-setting-pair">
-                    <input id="settingChannelName6" type="text" placeholder="Nome que aparecerá para o cliente">
-                    <input id="settingChannelUrl6" type="url" placeholder="Cole o link do canal">
-                  </div>
+                <div class="field field-wide">
+                  <label>Mensagem inicial</label>
+                  <textarea id="settingWelcome" rows="5"></textarea>
+                  <span class="settings-help">Não repita “Olá, eu sou...”, pois o nome já aparece automaticamente.</span>
                 </div>
-                <div class="channel-setting-item">
-                  <label>Canal adicional 7</label>
-                  <div class="channel-setting-pair">
-                    <input id="settingChannelName7" type="text" placeholder="Nome que aparecerá para o cliente">
-                    <input id="settingChannelUrl7" type="url" placeholder="Cole o link do canal">
-                  </div>
-                </div>
-                <div class="channel-setting-item">
-                  <label>Canal adicional 8</label>
-                  <div class="channel-setting-pair">
-                    <input id="settingChannelName8" type="text" placeholder="Nome que aparecerá para o cliente">
-                    <input id="settingChannelUrl8" type="url" placeholder="Cole o link do canal">
-                  </div>
-                </div>
-                <div class="channel-setting-item">
-                  <label>Canal adicional 9</label>
-                  <div class="channel-setting-pair">
-                    <input id="settingChannelName9" type="text" placeholder="Nome que aparecerá para o cliente">
-                    <input id="settingChannelUrl9" type="url" placeholder="Cole o link do canal">
-                  </div>
-                </div>
-                <div class="channel-setting-item">
-                  <label>Canal adicional 10</label>
-                  <div class="channel-setting-pair">
-                    <input id="settingChannelName10" type="text" placeholder="Nome que aparecerá para o cliente">
-                    <input id="settingChannelUrl10" type="url" placeholder="Cole o link do canal">
-                  </div>
+                <div class="field field-wide">
+                  <label>WhatsApp principal — país e DDD, somente números</label>
+                  <input id="settingWhatsapp" type="text" inputmode="numeric" placeholder="Exemplo: 5555999999999">
                 </div>
               </div>
-              <span class="settings-help">Somente os canais com nome e link preenchidos serão exibidos ao cliente.</span>
             </div>
-            <div class="field">
-              <label>Plano de revenda</label>
-              <input id="settingResellerPlan" type="text">
+          </details>
+
+          <details class="settings-section" open>
+            <summary>🔘 Botões do atendimento <small>Escolha quais opções aparecem para o cliente</small></summary>
+            <div class="settings-section-body">
+              <div class="settings-section-note">Verde significa <strong>Ativado</strong>. Cinza significa <strong>Desativado</strong>. Ao desativar, o botão some da atendente, mas os dados dele continuam salvos.</div>
+              <div class="settings-toolbar">
+                <button id="enableAllMenuButtons" type="button">✓ Ativar todos</button>
+                <button id="disableAllMenuButtons" type="button">○ Desativar todos</button>
+              </div>
+              <div class="settings-toggle-list">
+                <div class="settings-toggle-row"><div class="settings-toggle-copy"><strong>📺 Conta para uso pessoal</strong><span>Planos para 1, 2 ou 5 aparelhos.</span></div><label class="settings-switch"><input id="settingMenuPersonal" type="checkbox"><span class="settings-switch-track"></span><span class="settings-switch-state"></span></label></div>
+                <div class="settings-toggle-row"><div class="settings-toggle-copy"><strong>➕ Adquirir nova conta</strong><span>Compra de contas adicionais.</span></div><label class="settings-switch"><input id="settingMenuBuyMore" type="checkbox"><span class="settings-switch-track"></span><span class="settings-switch-state"></span></label></div>
+                <div class="settings-toggle-row"><div class="settings-toggle-copy"><strong>🧪 Teste / avaliação</strong><span>Abre o fluxo de teste configurado.</span></div><label class="settings-switch"><input id="settingMenuTest" type="checkbox"><span class="settings-switch-track"></span><span class="settings-switch-state"></span></label></div>
+                <div class="settings-toggle-row"><div class="settings-toggle-copy"><strong>📦 Central de TV Box</strong><span>Aparece quando existir ao menos uma opção de box ativa.</span></div><label class="settings-switch"><input id="settingMenuTvBox" type="checkbox"><span class="settings-switch-track"></span><span class="settings-switch-state"></span></label></div>
+                <div class="settings-toggle-row"><div class="settings-toggle-copy"><strong>👥 Painel para revenda</strong><span>Mostra os pacotes e versões de revenda.</span></div><label class="settings-switch"><input id="settingMenuReseller" type="checkbox"><span class="settings-switch-track"></span><span class="settings-switch-state"></span></label></div>
+                <div class="settings-toggle-row"><div class="settings-toggle-copy"><strong>⚙️ MacroDroid</strong><span>Mostra as opções Manual e Automática.</span></div><label class="settings-switch"><input id="settingMenuMacro" type="checkbox"><span class="settings-switch-track"></span><span class="settings-switch-state"></span></label></div>
+                <div class="settings-toggle-row"><div class="settings-toggle-copy"><strong>🛠️ Suporte para cliente</strong><span>Atendimento de quem já comprou.</span></div><label class="settings-switch"><input id="settingMenuSupport" type="checkbox"><span class="settings-switch-track"></span><span class="settings-switch-state"></span></label></div>
+              </div>
             </div>
-          </div>
-          <div>
-            <div class="field">
-              <label>Nome da atendente virtual</label>
-              <input id="settingAssistantName" type="text" maxlength="40" placeholder="Exemplo: Mila, Ana ou Júlia">
-              <span class="settings-help">Este nome aparecerá no cabeçalho, na apresentação e na identificação da atendente.</span>
+          </details>
+
+          <details class="settings-section">
+            <summary>💳 Planos e pagamentos <small>Planos pessoais, PIX, desconto e cartão</small></summary>
+            <div class="settings-section-body">
+              <div class="settings-fields">
+                <div class="settings-subtitle">Dados para pagamento via PIX</div>
+                <div class="field"><label>Chave PIX</label><input id="settingPixKey" type="text" placeholder="CPF, CNPJ, telefone, e-mail ou chave aleatória"></div>
+                <div class="field"><label>Nome do recebedor</label><input id="settingPixReceiver" type="text" placeholder="Nome que aparecerá para o cliente"></div>
+                <div class="field"><label>Banco do PIX</label><input id="settingPixBank" type="text" placeholder="Exemplo: Nubank ou Banco do Brasil"></div>
+                <div class="field"><label>Valor de cada conta adicional</label><input id="settingExtraAccountPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Exemplo: 50"></div>
+
+                <div class="settings-subtitle">Valores dos planos pessoais</div>
+                <div class="field"><label>1 aparelho</label><input id="settingPersonalPrice1" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>2 contas / 2 aparelhos</label><input id="settingPersonalPrice2" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>5 aparelhos</label><input id="settingPersonalPrice5" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>Desconto por seguir os canais</label><div class="inline-check"><input id="settingDiscountEnabled" type="checkbox"><span>Ativar desconto</span></div></div>
+                <div class="field"><label>Valor do desconto</label><input id="settingDiscountAmount" type="number" min="0" step="0.01" inputmode="decimal"></div>
+
+                <div class="settings-subtitle">Cartão de crédito — configuração atual</div>
+                <div class="field"><label>Taxa base do cartão (%)</label><input id="settingCardBaseFee" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Exemplo: 5,31"></div>
+                <div class="field field-wide"><label>Taxas adicionais — 1x até 12x (%)</label><textarea id="settingCardFeesText" rows="2" placeholder="0, 6,45, 8,67, 10,89..."></textarea><span class="settings-help">Mantida a lógica atual do arquivo.</span></div>
+              </div>
             </div>
-            <div class="field">
-              <label>Foto ou vídeo da atendente virtual</label>
-              <div class="assistant-media-picker">
-                <input id="settingAssistantMedia" type="file" accept="image/png,image/jpeg,image/webp,image/gif,video/mp4,video/webm">
-                <div class="assistant-media-preview" id="assistantMediaPreview">Usando o vídeo original da Mila.</div>
-                <div class="assistant-media-actions">
-                  <button class="ghost-btn" id="removeAssistantMedia" type="button">Remover foto/vídeo personalizado</button>
+          </details>
+
+          <details class="settings-section">
+            <summary>👥 Painel para revenda <small>Mensalidade, ajuda e versões</small></summary>
+            <div class="settings-section-body">
+              <div class="settings-fields">
+                <div class="field field-wide"><label>Texto do plano de revenda</label><input id="settingResellerPlan" type="text"></div>
+                <div class="field"><label>Mensalidade do painel</label><input id="settingResellerMonthlyFee" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>Ajuda para configurar emulador</label><input id="settingEmulatorFee" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>1.0.0.0 — Básico</label><input id="settingResellerPrice1000" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>1.2.0.3 — Básico Plus</label><input id="settingResellerPrice1203" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>2.1.1.0 — Avançado</label><input id="settingResellerPrice2110" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>3.0.2.0 — Ativador 16</label><input id="settingResellerPrice3020" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>3.1.1.0 — Completo</label><input id="settingResellerPrice3110" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                <div class="field"><label>3.1.2.0 — Mais completo</label><input id="settingResellerPrice3120" type="number" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="settings-section">
+            <summary>⚙️ MacroDroid <small>Valores das versões</small></summary>
+            <div class="settings-section-body"><div class="settings-fields">
+              <div class="field"><label>Básico / Manual</label><input id="settingMacroManualPrice" type="number" min="0" step="0.01" inputmode="decimal"></div>
+              <div class="field"><label>Automático</label><input id="settingMacroAutoPrice" type="number" min="0" step="0.01" inputmode="decimal"></div>
+            </div></div>
+          </details>
+
+          <details class="settings-section">
+            <summary>📦 Central de TV Box <small>Até três opções</small></summary>
+            <div class="settings-section-body">
+              <div class="settings-section-note">Ative somente os boxes que deseja mostrar. Se apenas um estiver ativo, somente ele será exibido.</div>
+              <div class="settings-mini-grid">
+                <div class="box-config-card"><div class="field"><label>Box 1</label><div class="inline-check"><input id="settingBox1Enabled" type="checkbox"><span>Ativar esta opção</span></div></div><div class="field"><input id="settingBox1Name" type="text" placeholder="Nome / marca"><input id="settingBox1Description" type="text" placeholder="Descrição curta"><input id="settingBox1Price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Valor no PIX"></div></div>
+                <div class="box-config-card"><div class="field"><label>Box 2</label><div class="inline-check"><input id="settingBox2Enabled" type="checkbox"><span>Ativar esta opção</span></div></div><div class="field"><input id="settingBox2Name" type="text" placeholder="Nome / marca"><input id="settingBox2Description" type="text" placeholder="Descrição curta"><input id="settingBox2Price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Valor no PIX"></div></div>
+                <div class="box-config-card"><div class="field"><label>Box 3</label><div class="inline-check"><input id="settingBox3Enabled" type="checkbox"><span>Ativar esta opção</span></div></div><div class="field"><input id="settingBox3Name" type="text" placeholder="Nome / marca"><input id="settingBox3Description" type="text" placeholder="Descrição curta"><input id="settingBox3Price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Valor no PIX"></div></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="settings-section">
+            <summary>🧪 Teste, entrega e canais <small>Link, código, imagem e YouTube</small></summary>
+            <div class="settings-section-body">
+              <div class="settings-fields">
+                <div class="field field-wide"><label>Código ou link enviado após confirmar o pagamento</label><textarea id="settingDownloadCode" rows="3" placeholder="Uso interno. Não é mostrado antes da confirmação."></textarea></div>
+                <div class="field"><label>Link do teste / avaliação</label><input id="settingTestLink" type="url" placeholder="https://..."></div>
+                <div class="field"><label>Imagem do teste — link</label><input id="settingTestImage" type="url" placeholder="https://.../imagem.png"><div class="test-image-preview" id="testImagePreview">Nenhuma imagem de teste configurada.</div></div>
+                <div class="field field-wide"><label>Código do teste</label><textarea id="settingTestCode" rows="3" placeholder="Código mostrado ou copiado no teste"></textarea></div>
+                <div class="settings-subtitle">Canais do YouTube</div>
+                <div class="field"><label>Canal principal</label><input id="settingChannelUrl1" type="url" placeholder="Link do canal principal"></div>
+                <div class="field"><label>Canal CH-IPTV</label><input id="settingChannelUrl2" type="url" placeholder="Link do Canal CH-IPTV"></div>
+                <div class="field"><label>JC-APK TV</label><input id="settingChannelUrl3" type="url" placeholder="Link do canal JC-APK TV"></div>
+                <div class="field"><label>JC-APK OFERTAS</label><input id="settingChannelUrl4" type="url" placeholder="Link do canal JC-APK OFERTAS"></div>
+                <div class="field"><label>Canal adicional 5</label><input id="settingChannelName5" type="text" placeholder="Nome"><input id="settingChannelUrl5" type="url" placeholder="Link"></div>
+                <div class="field"><label>Canal adicional 6</label><input id="settingChannelName6" type="text" placeholder="Nome"><input id="settingChannelUrl6" type="url" placeholder="Link"></div>
+                <div class="field"><label>Canal adicional 7</label><input id="settingChannelName7" type="text" placeholder="Nome"><input id="settingChannelUrl7" type="url" placeholder="Link"></div>
+                <div class="field"><label>Canal adicional 8</label><input id="settingChannelName8" type="text" placeholder="Nome"><input id="settingChannelUrl8" type="url" placeholder="Link"></div>
+                <div class="field"><label>Canal adicional 9</label><input id="settingChannelName9" type="text" placeholder="Nome"><input id="settingChannelUrl9" type="url" placeholder="Link"></div>
+                <div class="field"><label>Canal adicional 10</label><input id="settingChannelName10" type="text" placeholder="Nome"><input id="settingChannelUrl10" type="url" placeholder="Link"></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="settings-section">
+            <summary>🎨 Aparência <small>Fundos, escurecimento e cores</small></summary>
+            <div class="settings-section-body"><div class="settings-fields">
+              <div class="field"><label>Imagem de fundo principal</label><div class="assistant-media-picker"><input id="settingBackgroundMain" type="file" accept="image/png,image/jpeg,image/webp"><div class="assistant-media-preview background-media-preview" id="backgroundMainPreview">Usando o fundo padrão do site.</div><div class="assistant-media-actions"><button class="ghost-btn" id="removeBackgroundMain" type="button">Remover fundo personalizado</button></div></div></div>
+              <div class="field"><label>Imagem de fundo da conversa</label><div class="assistant-media-picker"><input id="settingBackgroundChat" type="file" accept="image/png,image/jpeg,image/webp"><div class="assistant-media-preview background-media-preview" id="backgroundChatPreview">Usando o fundo padrão da conversa.</div><div class="assistant-media-actions"><button class="ghost-btn" id="removeBackgroundChat" type="button">Remover fundo personalizado</button></div></div></div>
+              <div class="field"><label>Escurecimento do fundo principal</label><input id="settingBackgroundOverlay" type="range" min="0" max="90" step="1"></div>
+              <div class="field"><label>Escurecimento do fundo da conversa</label><input id="settingChatOverlay" type="range" min="0" max="90" step="1"></div>
+              <div class="field"><label>Cor principal dos blocos</label><input id="settingPanelColor" type="color"></div>
+              <div class="field"><label>Cor secundária dos blocos</label><input id="settingPanel2Color" type="color"></div>
+              <div class="field"><label>Cor das bordas e divisões</label><input id="settingLineColor" type="color"></div>
+            </div></div>
+          </details>
+
+          <details class="settings-section">
+            <summary>🔒 Desenvolvido por JC-APK TV <small>Somente o bloco superior da página</small></summary>
+            <div class="settings-section-body">
+              <div class="settings-section-note">Esta configuração controla apenas a assinatura fixa no topo. As assinaturas repetidas dentro da conversa foram removidas.</div>
+              <div class="brand-lock-card">
+                <strong>🔒 Área protegida por PIN</strong>
+                <span class="settings-help">Desbloqueie para alterar nome, contato e mensagem.</span>
+                <div class="brand-lock-row"><input id="developerPinInput" type="password" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="PIN de 6 números"><button class="primary-btn" id="unlockDeveloperSettings" type="button">Desbloquear</button><button class="ghost-btn" id="lockDeveloperSettings" type="button" hidden>Bloquear novamente</button></div>
+                <span class="brand-lock-status" id="developerLockStatus">🔐 Campos protegidos e bloqueados.</span>
+              </div>
+              <fieldset id="developerProtectedFields" class="protected-settings" disabled>
+                <div class="settings-fields">
+                  <div class="field"><label>Exibir assinatura no topo</label><div class="inline-check"><input id="settingDeveloperShow" type="checkbox"><span>Ativar assinatura</span></div></div>
+                  <div class="field"><label>Nome ou marca</label><input id="settingDeveloperName" type="text" placeholder="JC-APK TV"></div>
+                  <div class="field"><label>WhatsApp</label><input id="settingDeveloperWhatsapp" type="text" inputmode="numeric" placeholder="País, DDD e número"></div>
+                  <div class="field"><label>Instagram</label><input id="settingDeveloperInstagram" type="text" placeholder="@seuinstagram"></div>
+                  <div class="field field-wide"><label>Mensagem da marca</label><textarea id="settingDeveloperMessage" rows="4" placeholder="Projeto desenvolvido e personalizado por..."></textarea></div>
                 </div>
-              </div>
-              <span class="settings-help">Use imagem JPG, PNG, WEBP ou GIF; ou vídeo MP4/WEBM de até 2 MB. O arquivo fica salvo somente neste navegador.</span>
+              </fieldset>
             </div>
-            <div class="field">
-              <label>Imagem de fundo principal do site</label>
-              <div class="assistant-media-picker">
-                <input id="settingBackgroundMain" type="file" accept="image/png,image/jpeg,image/webp">
-                <div class="assistant-media-preview background-media-preview" id="backgroundMainPreview">Usando o fundo padrão do site.</div>
-                <div class="assistant-media-actions">
-                  <button class="ghost-btn" id="removeBackgroundMain" type="button">Remover fundo principal personalizado</button>
-                </div>
-              </div>
-              <span class="settings-help">Use JPG, PNG ou WEBP de até 2 MB. Este fundo aparece atrás de toda a página.</span>
-            </div>
-            <div class="field">
-              <label>Imagem de fundo da conversa</label>
-              <div class="assistant-media-picker">
-                <input id="settingBackgroundChat" type="file" accept="image/png,image/jpeg,image/webp">
-                <div class="assistant-media-preview background-media-preview" id="backgroundChatPreview">Usando o fundo padrão da conversa.</div>
-                <div class="assistant-media-actions">
-                  <button class="ghost-btn" id="removeBackgroundChat" type="button">Remover fundo da conversa personalizado</button>
-                </div>
-              </div>
-              <span class="settings-help">Use JPG, PNG ou WEBP de até 2 MB. Este fundo aparece dentro da área da conversa.</span>
-            </div>
-            <div class="field">
-              <label>Escurecimento do fundo principal</label>
-              <input id="settingBackgroundOverlay" type="range" min="0" max="90" step="1">
-              <span class="settings-help">Quanto maior, mais escuro fica o fundo para destacar os textos.</span>
-            </div>
-            <div class="field">
-              <label>Escurecimento do fundo da conversa</label>
-              <input id="settingChatOverlay" type="range" min="0" max="90" step="1">
-            </div>
-            <div class="field">
-              <label>Cor principal dos blocos</label>
-              <input id="settingPanelColor" type="color">
-            </div>
-            <div class="field">
-              <label>Cor secundária dos blocos</label>
-              <input id="settingPanel2Color" type="color">
-            </div>
-            <div class="field">
-              <label>Cor das bordas e divisões</label>
-              <input id="settingLineColor" type="color">
-            </div>
-            <div class="notice"><strong>Sua marca no atendente</strong><br>Essa assinatura ajuda outras pessoas a encontrarem você para criar ou personalizar um atendente semelhante. A marca fixa do topo “JC-APK TV” permanece protegida e não pode ser trocada pelo cliente.</div>
-            <div class="brand-lock-card">
-              <strong>🔒 Área protegida por PIN</strong>
-              <span class="settings-help">A marca JC-APK TV, o contato e a mensagem só podem ser alterados após desbloquear esta área.</span>
-              <div class="brand-lock-row">
-                <input id="developerPinInput" type="password" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="Digite o PIN de 6 números">
-                <button class="primary-btn" id="unlockDeveloperSettings" type="button">Desbloquear</button>
-                <button class="ghost-btn" id="lockDeveloperSettings" type="button" hidden>Bloquear novamente</button>
-              </div>
-              <span class="brand-lock-status" id="developerLockStatus">🔐 Campos protegidos e bloqueados.</span>
-            </div>
-            <fieldset id="developerProtectedFields" class="protected-settings" disabled>
-              <div class="field">
-                <label>Exibir minha assinatura <span class="protected-lock-badge">🔒 Protegido</span></label>
-                <div class="inline-check"><input id="settingDeveloperShow" type="checkbox"><span>Ativar assinatura</span></div>
-              </div>
-              <div class="field">
-                <label>Seu nome ou marca</label>
-                <input id="settingDeveloperName" type="text" placeholder="Exemplo: JC-APK TV">
-              </div>
-              <div class="field">
-                <label>Seu WhatsApp</label>
-                <input id="settingDeveloperWhatsapp" type="text" inputmode="numeric" placeholder="Somente números com país e DDD">
-              </div>
-              <div class="field">
-                <label>Seu Instagram</label>
-                <input id="settingDeveloperInstagram" type="text" placeholder="@seuinstagram">
-              </div>
-              <div class="field">
-                <label>Mensagem da sua marca</label>
-                <textarea id="settingDeveloperMessage" rows="4" placeholder="Projeto desenvolvido e personalizado por..."></textarea>
-              </div>
-            </fieldset>
-            <div class="field">
-              <label>Mensagem inicial</label>
-              <textarea id="settingWelcome" rows="6"></textarea>
-              <span class="settings-help">Não precisa repetir “Olá, eu sou...”, pois o nome da atendente já aparece acima.</span>
-            </div>
-            <div class="actions">
-              <button class="primary-btn" id="saveSettings">Salvar configurações</button>
-              <button class="danger-btn" id="resetDemo">Apagar dados da demonstração</button>
-            </div>
-          </div>
+          </details>
         </div>
+
+        <div class="settings-actions-sticky">
+          <button class="primary-btn" id="saveSettings">💾 Salvar configurações</button>
+          <button class="danger-btn" id="resetDemo">Apagar dados da demonstração</button>
+        </div>
+      </div>
       </div>
     </div>
   </section>
@@ -1510,18 +1425,13 @@
 <script src="dados/common.js"></script>
 <script src="dados/attendant-preload.js"></script>
 <script>
-(async () => {
+(() => {
   "use strict";
-
-  // Aguarda o Supabase identificar o cliente e carregar as configurações
-  // antes de iniciar a interface. Sem isso, o app podia usar a chave local
-  // do usuário errado e salvar/publicar dados em locais diferentes.
-  await (window.JC_ATTENDANT_BOOT_PROMISE || Promise.resolve());
 
   const JC_CTX = window.JC_ATTENDANT_CONTEXT || {slug:"jc-apk-tv",storageKey:"demo_ai_settings_v1_jc-apk-tv",leadsKey:"demo_ai_leads_v1_jc-apk-tv"};
   const STORAGE = {
-    get leads(){ return (window.JC_ATTENDANT_CONTEXT && window.JC_ATTENDANT_CONTEXT.leadsKey) || JC_CTX.leadsKey; },
-    get settings(){ return (window.JC_ATTENDANT_CONTEXT && window.JC_ATTENDANT_CONTEXT.storageKey) || JC_CTX.storageKey; }
+    leads: JC_CTX.leadsKey,
+    settings: JC_CTX.storageKey
   };
 
   const seedAnswers = [
@@ -1639,6 +1549,15 @@
     resellerPrice3120: 350,
     macroManualPrice: 300,
     macroAutoPrice: 450,
+    menuVisibility: {
+      personal: true,
+      buyMore: true,
+      test: true,
+      tvBox: true,
+      reseller: true,
+      macro: true,
+      support: true
+    },
     boxOptions: [
       {enabled:true, name:"TV Box Smart", description:"Modelo padrão para venda no atendimento.", price:0},
       {enabled:false, name:"TV Box Plus", description:"Modelo intermediário.", price:0},
@@ -1977,6 +1896,16 @@
     settings.resellerPrice3120 = Number.isFinite(Number(settings.resellerPrice3120)) ? Math.max(0, Number(settings.resellerPrice3120)) : defaultSettings.resellerPrice3120;
     settings.macroManualPrice = Number.isFinite(Number(settings.macroManualPrice)) ? Math.max(0, Number(settings.macroManualPrice)) : defaultSettings.macroManualPrice;
     settings.macroAutoPrice = Number.isFinite(Number(settings.macroAutoPrice)) ? Math.max(0, Number(settings.macroAutoPrice)) : defaultSettings.macroAutoPrice;
+    const savedMenuVisibility = settings.menuVisibility && typeof settings.menuVisibility === "object" ? settings.menuVisibility : {};
+    settings.menuVisibility = {
+      personal: savedMenuVisibility.personal !== false,
+      buyMore: savedMenuVisibility.buyMore !== false,
+      test: savedMenuVisibility.test !== false,
+      tvBox: savedMenuVisibility.tvBox !== false,
+      reseller: savedMenuVisibility.reseller !== false,
+      macro: savedMenuVisibility.macro !== false,
+      support: savedMenuVisibility.support !== false
+    };
     settings.boxOptions = normalizeBoxOptions(settings.boxOptions);
     settings.cardBaseFee = Number.isFinite(Number(settings.cardBaseFee)) ? Math.max(0, Number(settings.cardBaseFee)) : defaultSettings.cardBaseFee;
     settings.cardInstallmentFees = parseCardInstallmentFees(settings.cardInstallmentFees);
@@ -2264,10 +2193,7 @@
     setStatus("Escolhendo serviço");
     const settings = getSettings();
     const mobileDirectOpening = window.matchMedia("(max-width: 600px)").matches;
-    addBubble(mobileDirectOpening ? `
-      ${developerIntroMarkup(settings, true)}
-      <div class="intro-prompt-card">Primeiro, escolha o que você procura:</div>
-    ` : `
+    addBubble(`
       <div class="mila-welcome-card">
         <div class="mila-media">
           ${assistantMediaMarkup("", `${settings.assistantName}, assistente virtual`)}
@@ -2276,22 +2202,24 @@
           <h3>Olá! 👋 Eu sou ${escapeHtml(settings.assistantName)}.</h3>
           <p>${escapeHtml(getAssistantWelcome(settings))}</p>
           <div class="mila-badge">${escapeHtml(settings.assistantName)} — Assistente virtual</div>
-                  </div>
+        </div>
       </div>
       <div class="intro-prompt-card">Primeiro, escolha o que você procura:</div>
     `);
-    const mainChoices = [
-      {label:"📺 Conta para uso pessoal", action:() => selectService("Conta para uso pessoal")},
-      {label:"➕ Adquirir nova conta", action:() => selectService("Comprar mais")},
-      {label:"🧪 Teste / avaliação", action:() => testFlow()},
-      {label:"👥 Painel para revenda", action:() => selectService("Painel para revenda")},
-      {label:"⚙️ MacroDroid", action:() => selectService("MacroDroid")},
-      {label:"🛠️ Já sou cliente e preciso de suporte", secondary:true, action:() => supportFlow()}
-    ];
-    if(getAvailableBoxOptions().length){
-      mainChoices.splice(3, 0, {label:"📦 Central de TV Box", action:() => selectService("TV Box")});
+    const visibility = settings.menuVisibility || defaultSettings.menuVisibility;
+    const mainChoices = [];
+    if(visibility.personal) mainChoices.push({label:"📺 Conta para uso pessoal", action:() => selectService("Conta para uso pessoal")});
+    if(visibility.buyMore) mainChoices.push({label:"➕ Adquirir nova conta", action:() => selectService("Comprar mais")});
+    if(visibility.test) mainChoices.push({label:"🧪 Teste / avaliação", action:() => testFlow()});
+    if(visibility.tvBox && getAvailableBoxOptions().length) mainChoices.push({label:"📦 Central de TV Box", action:() => selectService("TV Box")});
+    if(visibility.reseller) mainChoices.push({label:"👥 Painel para revenda", action:() => selectService("Painel para revenda")});
+    if(visibility.macro) mainChoices.push({label:"⚙️ MacroDroid", action:() => selectService("MacroDroid")});
+    if(visibility.support) mainChoices.push({label:"🛠️ Já sou cliente e preciso de suporte", secondary:true, action:() => supportFlow()});
+    if(mainChoices.length){
+      addChoices(mainChoices);
+    }else{
+      addBubble("Nenhuma opção do menu está ativa no momento. Entre em contato com o responsável pela atendente.");
     }
-    addChoices(mainChoices);
     renderMetrics();
     keepMilaSpeaking(document);
     scrollChatToTop();
@@ -4194,6 +4122,13 @@
     $("#settingResellerPrice3120").value = settings.resellerPrice3120;
     $("#settingMacroManualPrice").value = settings.macroManualPrice;
     $("#settingMacroAutoPrice").value = settings.macroAutoPrice;
+    $("#settingMenuPersonal").checked = settings.menuVisibility.personal;
+    $("#settingMenuBuyMore").checked = settings.menuVisibility.buyMore;
+    $("#settingMenuTest").checked = settings.menuVisibility.test;
+    $("#settingMenuTvBox").checked = settings.menuVisibility.tvBox;
+    $("#settingMenuReseller").checked = settings.menuVisibility.reseller;
+    $("#settingMenuMacro").checked = settings.menuVisibility.macro;
+    $("#settingMenuSupport").checked = settings.menuVisibility.support;
     $("#settingCardBaseFee").value = settings.cardBaseFee;
     $("#settingCardFeesText").value = formatCardInstallmentFees(settings.cardInstallmentFees);
     settings.boxOptions.forEach((item,index) => {
@@ -4420,6 +4355,30 @@
     toast("Área da marca bloqueada novamente.");
   });
 
+  const menuToggleIds = [
+    "settingMenuPersonal","settingMenuBuyMore","settingMenuTest","settingMenuTvBox",
+    "settingMenuReseller","settingMenuMacro","settingMenuSupport"
+  ];
+
+  function setAllMenuButtons(enabled){
+    menuToggleIds.forEach(id => { const input = $(`#${id}`); if(input) input.checked = enabled; });
+    toast(enabled ? "Todos os botões foram ativados. Salve para aplicar." : "Todos os botões foram desativados. Salve para aplicar.");
+  }
+
+  $("#enableAllMenuButtons")?.addEventListener("click", () => setAllMenuButtons(true));
+  $("#disableAllMenuButtons")?.addEventListener("click", () => setAllMenuButtons(false));
+
+  function adjustSettingsSectionsForScreen(){
+    const mobile = window.matchMedia("(max-width: 700px)").matches;
+    $$("#settingsSections .settings-section").forEach((section,index) => {
+      if(!section.dataset.autoAdjusted){
+        section.open = mobile ? index === 0 : true;
+        section.dataset.autoAdjusted = "1";
+      }
+    });
+  }
+  adjustSettingsSectionsForScreen();
+
   $("#saveSettings").addEventListener("click", () => {
     const currentSettings = getSettings();
     const settings = {
@@ -4455,6 +4414,15 @@
       resellerPrice3120: Math.max(0, Number(String($("#settingResellerPrice3120").value || defaultSettings.resellerPrice3120).replace(",", "."))),
       macroManualPrice: Math.max(0, Number(String($("#settingMacroManualPrice").value || defaultSettings.macroManualPrice).replace(",", "."))),
       macroAutoPrice: Math.max(0, Number(String($("#settingMacroAutoPrice").value || defaultSettings.macroAutoPrice).replace(",", "."))),
+      menuVisibility: {
+        personal: $("#settingMenuPersonal").checked,
+        buyMore: $("#settingMenuBuyMore").checked,
+        test: $("#settingMenuTest").checked,
+        tvBox: $("#settingMenuTvBox").checked,
+        reseller: $("#settingMenuReseller").checked,
+        macro: $("#settingMenuMacro").checked,
+        support: $("#settingMenuSupport").checked
+      },
       boxOptions: Array.from({length:3}, (_,index) => ({
         enabled: $(`#settingBox${index + 1}Enabled`).checked,
         name: $(`#settingBox${index + 1}Name`).value.trim() || defaultSettings.boxOptions[index].name,
@@ -4522,7 +4490,21 @@
     const brandLogo = $("#brandLogo");
     if(brandLogo) brandLogo.src = settings.logoUrl || DEFAULT_BRAND_LOGO;
     const topDeveloperCard = $("#topDeveloperCard");
-    if(topDeveloperCard) topDeveloperCard.style.display = "flex";
+    if(topDeveloperCard){
+      const shouldShow = settings.developerShow !== false;
+      topDeveloperCard.style.display = shouldShow ? "flex" : "none";
+      const topTitle = $("#topDeveloperTitle");
+      const topText = $("#topDeveloperText");
+      const topLink = $("#topDeveloperLink");
+      if(topTitle) topTitle.textContent = `🧩 Desenvolvido por ${settings.developerName || "JC-APK TV"}`;
+      if(topText) topText.textContent = settings.developerMessage || defaultSettings.developerMessage;
+      if(topLink){
+        const number = String(settings.developerWhatsapp || "").replace(/\D/g, "");
+        const readyMessage = "Olá! Vi o projeto desenvolvido pela JC-APK TV e gostaria de solicitar um orçamento para um atendente personalizado ou outro projeto digital.";
+        topLink.href = number ? `https://wa.me/${number}?text=${encodeURIComponent(readyMessage)}` : "#";
+        topLink.style.display = number ? "inline-flex" : "none";
+      }
+    }
     const assistantHeaderName = $("#assistantHeaderName");
     if(assistantHeaderName) assistantHeaderName.textContent = settings.assistantName;
     rootStyle.setProperty("--panel", settings.panelColor || defaultSettings.panelColor);
@@ -4544,7 +4526,6 @@
       rootStyle.removeProperty("--chat-bg-size");
       rootStyle.removeProperty("--chat-bg-position");
     }
-    renderDeveloperSignature();
     document.title = `${settings.brand} — Demonstração`;
   }
 
