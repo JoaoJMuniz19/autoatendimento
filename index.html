@@ -1510,13 +1510,18 @@
 <script src="dados/common.js"></script>
 <script src="dados/attendant-preload.js"></script>
 <script>
-(() => {
+(async () => {
   "use strict";
+
+  // Aguarda o Supabase identificar o cliente e carregar as configurações
+  // antes de iniciar a interface. Sem isso, o app podia usar a chave local
+  // do usuário errado e salvar/publicar dados em locais diferentes.
+  await (window.JC_ATTENDANT_BOOT_PROMISE || Promise.resolve());
 
   const JC_CTX = window.JC_ATTENDANT_CONTEXT || {slug:"jc-apk-tv",storageKey:"demo_ai_settings_v1_jc-apk-tv",leadsKey:"demo_ai_leads_v1_jc-apk-tv"};
   const STORAGE = {
-    leads: JC_CTX.leadsKey,
-    settings: JC_CTX.storageKey
+    get leads(){ return (window.JC_ATTENDANT_CONTEXT && window.JC_ATTENDANT_CONTEXT.leadsKey) || JC_CTX.leadsKey; },
+    get settings(){ return (window.JC_ATTENDANT_CONTEXT && window.JC_ATTENDANT_CONTEXT.storageKey) || JC_CTX.storageKey; }
   };
 
   const seedAnswers = [

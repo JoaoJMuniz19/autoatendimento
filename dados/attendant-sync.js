@@ -24,5 +24,11 @@ function lockSignatureUI(){
 function bindSave(){const b=$('saveSettings');if(!b)return;b.addEventListener('click',()=>setTimeout(()=>syncSettings().catch(e=>toast('Não foi possível publicar: '+e.message)),120))}
 function rewriteStorageKeys(){/* As chaves já são definidas no HTML usando JC_ATTENDANT_CONTEXT. */}
 function init(){hidePublicAdmin();lockSignatureUI();addPublicLink();protectAdmin();bindSave();rewriteStorageKeys();if(ctx.configMode&&ctx.testMode){const panel=$('panel-settings');if(panel){const n=document.createElement('div');n.style.cssText='padding:10px;border:1px solid rgba(255,191,71,.3);background:rgba(255,191,71,.08);border-radius:12px;margin-bottom:12px;color:#ffe5a6';n.textContent='MODO TESTE — você pode simular as configurações, mas elas não serão publicadas.';panel.prepend(n)}}}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+async function startWhenReady(){
+  try{ await (window.JC_ATTENDANT_BOOT_PROMISE||Promise.resolve()); }catch(e){}
+  if(window.JC_ATTENDANT_CONTEXT?.error) return;
+  init();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',startWhenReady,{once:true});
+else startWhenReady();
 })();

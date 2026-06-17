@@ -10,7 +10,5 @@ window.JC_SUPABASE_CONFIG = {
   adminEmail: '',
   panelUrl: 'https://joaojmuniz19.github.io/Painel-JC-APK-TV/geradores/',
   attendantUrl: 'https://joaojmuniz19.github.io/autoatendimento/',
-  testUsername: 'teste',
-  testPassword: 'teste',
   initialPassword: 'JC-APK TV'
 };
