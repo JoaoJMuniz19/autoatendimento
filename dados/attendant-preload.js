@@ -8,12 +8,16 @@
 
   const publicSlug=(params.get('cliente')||'').toLowerCase().replace(/[^a-z0-9-]/g,'');
   const configMode=params.get('mode')==='config';
+  const previewMode=params.get('preview')==='admin';
   const cachedSlug=cached?.attendant?.slug||cached?.profile?.username||'';
   const slug=publicSlug||cachedSlug||'jc-apk-tv';
 
   window.JC_ATTENDANT_CONTEXT={
     slug,
     configMode,
+    previewMode,
+    adminTarget:false,
+    targetUserId:null,
     storageKey:`demo_ai_settings_v1_${slug}`,
     leadsKey:`demo_ai_leads_v1_${slug}`,
     access:null,
@@ -58,11 +62,18 @@
       const next=Object.assign({},cached,{
         profile:access?.profile||cached.profile||{},
         attendant:access?.attendant||cached.attendant||{},
+        permissions:access?.permissions||cached.permissions||{},
         general:access?.general||cached.general||{}
       });
       sessionStorage.setItem('jc_apk_access',JSON.stringify(next));
       cached=next;
     }catch(e){}
+  }
+  async function authenticatedAccess(){
+    const {data:{session},error}=await A.client.auth.getSession();
+    if(error)throw error;
+    if(!session)return null;
+    return A.myAccess();
   }
 
   window.JC_ATTENDANT_BOOT_PROMISE=(async()=>{
@@ -74,41 +85,62 @@
     try{
       let settings=null,signature=null,updated='';
 
-      if(configMode){
+      if(previewMode){
+        if(!publicSlug){showError('A prévia precisa do identificador do cliente.');return false;}
+        const access=await authenticatedAccess();
+        if(access?.profile?.role!=='admin'){showError('Esta prévia é restrita ao administrador.');return false;}
+        ctx.access=access;ctx.adminTarget=true;
+        const raw=localStorage.getItem('jc_attendant_admin_preview_'+publicSlug);
+        if(!raw){showError('A prévia expirou ou não foi preparada. Volte ao painel de atendentes.');return false;}
+        const draft=JSON.parse(raw);
+        if(Number(draft.expiresAt||0)<Date.now()){localStorage.removeItem('jc_attendant_admin_preview_'+publicSlug);showError('A prévia expirou. Gere uma nova no painel de atendentes.');return false;}
+        const sigRes=await A.client.from('app_settings').select('value').eq('key','signature').maybeSingle();
+        if(sigRes.error)throw sigRes.error;
+        setContextSlug(publicSlug);
+        settings=draft.settings||{};
+        signature=sigRes.data?.value||{};
+        updated='preview-'+String(draft.createdAt||Date.now());
+      }else if(configMode){
         if(ctx.testMode){ ctx.ready=true; setTimeout(finish,250); return true; }
 
-        const {data:{session},error:sessionError}=await A.client.auth.getSession();
-        if(sessionError) throw sessionError;
-        if(!session){
+        const access=await authenticatedAccess();
+        if(!access){
           showError('Faça login no painel do cliente antes de configurar.<br><a style="color:#25d366" href="'+(A.cfg.panelUrl||'../geradores/')+'">Ir para o painel</a>');
           return false;
         }
-
-        const access=await A.myAccess();
         ctx.access=access;
         refreshCachedAccess(access);
-
-        const allowed=access?.profile?.role==='admin'||access?.profile?.role==='test'||access?.profile?.attendant_enabled||access?.permissions?.['attendant.open'];
-        if(!allowed){
-          showError('O Atendente Virtual não está liberado para este usuário.<br><a style="color:#25d366" href="'+(A.cfg.panelUrl||'../geradores/')+'">Voltar ao painel</a>');
-          return false;
-        }
         if(access?.profile?.role==='test'){ ctx.testMode=true; ctx.ready=true; setTimeout(finish,250); return true; }
 
+        const isAdmin=access?.profile?.role==='admin';
+        const canConfigure=isAdmin||Boolean(access?.permissions?.['attendant.configure']);
+        if(!canConfigure){
+          showError('A configuração completa não está liberada para este usuário.<br><a style="color:#25d366" href="'+(A.cfg.panelUrl||'../geradores/')+'">Voltar ao painel</a>');
+          return false;
+        }
+
+        let attQuery=A.client.from('attendant_profiles').select('user_id,slug,public_settings,published,config_password_changed_at,updated_at');
+        if(isAdmin&&publicSlug){
+          attQuery=attQuery.eq('slug',publicSlug);
+          ctx.adminTarget=true;
+        }else{
+          attQuery=attQuery.eq('user_id',access.profile.id);
+        }
         const [attRes,sigRes]=await Promise.all([
-          A.client.from('attendant_profiles').select('slug,public_settings,published,config_password_changed_at,updated_at').eq('user_id',access.profile.id).maybeSingle(),
+          attQuery.maybeSingle(),
           A.client.from('app_settings').select('value').eq('key','signature').maybeSingle()
         ]);
         if(attRes.error) throw attRes.error;
         if(sigRes.error) throw sigRes.error;
         if(!attRes.data){
-          showError('O acesso está liberado, mas o perfil da atendente não foi criado no banco.<br>Execute <b>03-CORRIGIR-ATENDENTE.sql</b> no Supabase e abra novamente.');
+          showError('O perfil da atendente não foi encontrado.<br>Confira o cliente no novo painel de atendentes.');
           return false;
         }
 
+        ctx.targetUserId=attRes.data.user_id;
         setContextSlug(attRes.data.slug);
-        if(access.attendant) access.attendant.slug=attRes.data.slug;
-        refreshCachedAccess(access);
+        if(!ctx.adminTarget&&access.attendant) access.attendant.slug=attRes.data.slug;
+        if(!ctx.adminTarget)refreshCachedAccess(access);
         settings=attRes.data.public_settings||{};
         signature=sigRes.data?.value||{};
         updated=attRes.data.updated_at||'';
@@ -139,7 +171,7 @@
 
       if(prev!==next){
         localStorage.setItem(key,next);
-        const mark='jc_att_reload_'+ctx.slug;
+        const mark='jc_att_reload_'+ctx.slug+(ctx.previewMode?'_preview':'');
         const version=updated||next;
         const last=sessionStorage.getItem(mark);
         if(last!==version){
