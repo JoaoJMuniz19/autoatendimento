@@ -539,6 +539,14 @@
     .social-manager-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px;border:1px solid rgba(77,163,255,.22);border-radius:14px;background:linear-gradient(135deg,rgba(77,163,255,.09),rgba(37,211,102,.06))}
     .social-manager-head strong{display:block;font-size:14px;color:#fff;margin-bottom:4px}
     .social-manager-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+    .social-global-control{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px;border:1px solid rgba(255,191,71,.3);border-radius:14px;background:linear-gradient(135deg,rgba(255,191,71,.1),rgba(77,163,255,.055));transition:.2s}
+    .social-global-control.is-off{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.035)}
+    .social-global-copy strong{display:block;color:#fff;font-size:14px;margin-bottom:4px}
+    .social-global-copy p{margin:0;color:var(--muted);font-size:11px;line-height:1.45}
+    .social-global-toggle{min-width:205px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.18)}
+    .social-global-toggle .inline-check{margin:0}
+    .social-global-status{display:block;margin-top:5px;color:#9ee8b7;font-size:10px;font-weight:850;text-align:center}
+    .social-global-control.is-off .social-global-status{color:#c3cbd0}
     .social-add-btn{flex:0 0 auto;border:0;border-radius:11px;padding:11px 14px;background:linear-gradient(135deg,var(--green),#18b95a);color:#04150b;font-weight:950;cursor:pointer;box-shadow:0 8px 22px rgba(37,211,102,.18)}
     .social-add-btn:hover{filter:brightness(1.06)}
     .social-empty{padding:22px;text-align:center;border:1px dashed rgba(255,255,255,.18);border-radius:14px;color:var(--muted);background:rgba(0,0,0,.12)}
@@ -628,6 +636,8 @@
       .social-config-card{grid-template-columns:auto minmax(0,1fr)}
       .social-card-actions{grid-column:1/-1;max-width:none;justify-content:flex-start}
       .social-editor-grid{grid-template-columns:1fr}
+    .social-global-control{grid-template-columns:1fr}
+    .social-global-toggle{min-width:0}
       .social-editor-grid .field-wide{grid-column:auto}
       .settings-section>summary{padding:14px}
       .settings-section>summary small{display:none}
@@ -1263,7 +1273,7 @@
     </div>
     <div class="top-actions">
       <button class="icon-btn" id="restartBtn" title="Reiniciar atendimento">↻ <span class="label">Reiniciar</span></button>
-      <button class="icon-btn promo-open-btn" id="adminBtn" title="Abrir painel JC-APK TV"><span class="hand-gif" aria-hidden="true">👋</span><span class="promo-text">JC-APK TV</span></button>
+      <button class="icon-btn promo-open-btn" id="adminBtn" type="button" hidden aria-hidden="true" tabindex="-1" style="display:none!important"><span class="hand-gif" aria-hidden="true">👋</span><span class="promo-text">JC-APK TV</span></button>
     </div>
   </header>
 
@@ -1316,7 +1326,8 @@
   </main>
 </div>
 
-<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-label="Painel administrativo">
+<!-- Configuração administrativa mantida apenas como compatibilidade interna. O acesso visual foi removido da atendente pública; use configuracao-atendente.html no Painel-JC-APK-TV. -->
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-label="Painel administrativo" hidden aria-hidden="true" style="display:none!important">
   <section class="admin-shell">
     <div class="admin-head">
       <div>
@@ -1482,6 +1493,17 @@
                     <button class="social-add-btn" id="addSocialNetwork" type="button">＋ Adicionar rede social</button>
                   </div>
 
+                  <div class="social-global-control" id="socialDiscountGlobalControl">
+                    <div class="social-global-copy">
+                      <strong>Descontos por redes sociais</strong>
+                      <p>Desative para manter os botões e logos das redes visíveis sem oferecer desconto. As campanhas cadastradas ficam guardadas para você reativar depois.</p>
+                    </div>
+                    <div class="social-global-toggle">
+                      <div class="inline-check"><input id="settingDiscountEnabled" type="checkbox" checked><span>Ativar descontos</span></div>
+                      <span class="social-global-status" id="socialDiscountGlobalStatus">DESCONTOS ATIVADOS</span>
+                    </div>
+                  </div>
+
                   <div class="social-list" id="socialNetworkList"></div>
                   <div class="social-empty" id="socialNetworkEmpty">Nenhuma rede social cadastrada. Clique em <strong>Adicionar rede social</strong>.</div>
 
@@ -1500,6 +1522,10 @@
                           <option value="facebook">Facebook</option>
                           <option value="linkedin">LinkedIn</option>
                           <option value="kwai">Kwai</option>
+                          <option value="whatsapp">WhatsApp</option>
+                          <option value="telegram">Telegram</option>
+                          <option value="x">X (Twitter)</option>
+                          <option value="threads">Threads</option>
                         </select>
                       </div>
                       <div class="field">
@@ -1522,6 +1548,8 @@
                           <option value="like">Curtir a página</option>
                           <option value="watch">Assistir ao vídeo</option>
                           <option value="visit">Acessar o perfil</option>
+                          <option value="message">Abrir conversa</option>
+                          <option value="join">Entrar no canal ou grupo</option>
                           <option value="custom">Texto personalizado</option>
                         </select>
                       </div>
@@ -1795,7 +1823,11 @@
     tiktok:{label:"TikTok", defaultAction:"follow", helper:"Perfil de vídeos"},
     facebook:{label:"Facebook", defaultAction:"like", helper:"Página ou perfil"},
     linkedin:{label:"LinkedIn", defaultAction:"follow", helper:"Página profissional"},
-    kwai:{label:"Kwai", defaultAction:"follow", helper:"Perfil de vídeos"}
+    kwai:{label:"Kwai", defaultAction:"follow", helper:"Perfil de vídeos"},
+    whatsapp:{label:"WhatsApp", defaultAction:"message", helper:"Conversa, canal ou comunidade"},
+    telegram:{label:"Telegram", defaultAction:"join", helper:"Canal, grupo ou perfil"},
+    x:{label:"X (Twitter)", defaultAction:"follow", helper:"Perfil ou publicação"},
+    threads:{label:"Threads", defaultAction:"follow", helper:"Perfil ou publicação"}
   };
 
   const SOCIAL_ACTION_LABELS = {
@@ -1804,6 +1836,8 @@
     like:"Curtir a página",
     watch:"Assistir ao vídeo",
     visit:"Acessar o perfil",
+    message:"Abrir a conversa",
+    join:"Entrar no canal ou grupo",
     custom:"Realizar a ação informada"
   };
 
@@ -1818,7 +1852,11 @@
       tiktok:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#08090d"/><path d="M27 12v15.2a6.6 6.6 0 1 1-5.2-6.5" fill="none" stroke="#25f4ee" stroke-width="6" stroke-linecap="round"/><path d="M29 11c1.2 4.2 3.6 6.6 7 7" fill="none" stroke="#fe2c55" stroke-width="5" stroke-linecap="round"/><path d="M28 12v15.2a6.6 6.6 0 1 1-5.2-6.5" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg></span>`,
       facebook:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#1877f2"/><path d="M27.3 39V26.3h4.2l.7-5h-4.9v-3.2c0-1.5.4-2.5 2.6-2.5h2.8v-4.4c-.5-.1-2.2-.2-4.1-.2-4.1 0-6.9 2.5-6.9 7.1v3.2H17v5h4.7V39h5.6Z" fill="#fff"/></svg></span>`,
       linkedin:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#0a66c2"/><circle cx="16" cy="17" r="3" fill="#fff"/><path d="M13.5 22h5V36h-5V22Zm8 0h4.7v1.9c1.2-1.6 2.8-2.5 5-2.5 4.5 0 5.8 3 5.8 7V36h-5v-6.8c0-1.8-.1-3.7-2.5-3.7s-2.9 2-2.9 3.6V36h-5.1V22Z" fill="#fff"/></svg></span>`,
-      kwai:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#ff5a1f"/><path d="M18 12h12a5 5 0 0 1 5 5v14a5 5 0 0 1-5 5H18a5 5 0 0 1-5-5V17a5 5 0 0 1 5-5Zm0 5v5l6 4 6-4v-5H18Zm0 14h12v-4l-6 4-6-4v4Z" fill="#fff"/></svg></span>`
+      kwai:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#ff5a1f"/><path d="M18 12h12a5 5 0 0 1 5 5v14a5 5 0 0 1-5 5H18a5 5 0 0 1-5-5V17a5 5 0 0 1 5-5Zm0 5v5l6 4 6-4v-5H18Zm0 14h12v-4l-6 4-6-4v4Z" fill="#fff"/></svg></span>`,
+      whatsapp:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#25d366"/><path d="M13 36l2.1-7.1A13.2 13.2 0 1 1 20 34.3L13 36Zm7.4-7.1c3.9 2.4 8.7 2.7 10.8.7 1-1 .9-2.2.6-2.5-.4-.3-3-1.5-3.5-1.7-.5-.2-.9-.3-1.3.3l-1.6 2c-.3.4-.7.4-1.2.2-3.2-1.4-5.4-3.7-6.7-6.7-.2-.5 0-.9.3-1.2l1.5-1.7c.3-.4.4-.8.2-1.2l-1.5-3.6c-.2-.6-.8-.8-1.3-.8h-1.1c-.7 0-1.4.4-1.8 1-1.7 2.2-1.7 5.5.2 8.8 1.4 2.5 3.4 4.8 6.4 6.6Z" fill="#fff"/></svg></span>`,
+      telegram:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#229ed9"/><path d="m10 23 27-10c1.2-.4 2.2.3 1.8 2l-4.6 21c-.3 1.5-1.2 1.9-2.5 1.2l-7-5.2-3.4 3.3c-.4.4-.7.7-1.4.7l.5-7.1 13-11.8c.6-.5-.1-.8-.9-.3L16.4 27 9.5 24.8C8 24.3 8 23.5 10 23Z" fill="#fff"/></svg></span>`,
+      x:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#050505"/><path d="M13 12h7.7l6.1 8.2L34 12h2.4l-8.5 10.2L36 36h-7.7l-6.5-8.8L14 36h-2.4l9.1-10.8L13 12Zm6.6 2.2h-2.4l12.1 19.6h2.4L19.6 14.2Z" fill="#fff"/></svg></span>`,
+      threads:`<span class="social-logo" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#050505"/><path d="M24 10c8.8 0 14 5.3 14 14.2 0 8.5-4.7 13.8-12.3 13.8-6.7 0-11.4-3.7-11.4-9.1 0-4.9 3.7-8.1 9.4-8.1 2.4 0 4.6.5 6.4 1.5-.5-3.5-2.5-5.2-6.1-5.2-2.4 0-4.3.7-6.1 2.2l-2.4-3.1C18 12 20.8 10 24 10Zm.1 15c-3.2 0-5.1 1.4-5.1 3.8 0 2.6 2.3 4.5 5.8 4.5 3.8 0 5.9-2.3 5.9-6.2-1.8-1.4-4-2.1-6.6-2.1Z" fill="#fff"/></svg></span>`
     };
     return logos[platform] || logos.youtube;
   }
@@ -1856,7 +1894,12 @@
     return (settings.socialNetworks || []).filter(item => item.active && item.url && item.name);
   }
 
+  function getSimpleSocialNetworks(settings=getSettings()){
+    return getActiveSocialNetworks(settings).filter(item => settings.discountEnabled === false || !item.discountEnabled || Number(item.discountValue || 0) <= 0);
+  }
+
   function getDiscountCampaigns(settings=getSettings()){
+    if(settings.discountEnabled === false) return [];
     return getActiveSocialNetworks(settings).filter(item => item.discountEnabled && Number(item.discountValue || 0) > 0);
   }
 
@@ -2257,9 +2300,10 @@
     }
     settings.socialNetworks = settings.socialNetworks.map(normalizeSocialNetwork).slice(0,20);
     const firstSocialDiscount = settings.socialNetworks.find(item => item.active && item.discountEnabled && item.discountValue > 0);
-    if(firstSocialDiscount){
-      settings.discountEnabled = true;
-      settings.discountAmount = firstSocialDiscount.discountType === "fixed" ? firstSocialDiscount.discountValue : settings.discountAmount;
+    if(typeof settings.discountEnabled !== "boolean") settings.discountEnabled = Boolean(firstSocialDiscount);
+    settings.discountEnabled = settings.discountEnabled !== false;
+    if(firstSocialDiscount && firstSocialDiscount.discountType === "fixed"){
+      settings.discountAmount = firstSocialDiscount.discountValue;
     }
     settings.assistantName = String(settings.assistantName || defaultSettings.assistantName).trim() || defaultSettings.assistantName;
     settings.brand = String(settings.brand || defaultSettings.brand).trim() || defaultSettings.brand;
@@ -2603,7 +2647,7 @@
           <div class="mila-badge">${escapeHtml(settings.assistantName)} — Assistente virtual</div>
         </div>
       </div>
-      ${getActiveSocialNetworks(settings).filter(item => !item.discountEnabled).length ? `<div class="social-public-links">${getActiveSocialNetworks(settings).filter(item => !item.discountEnabled).map(item => `<a class="social-public-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${socialLogoMarkup(item.platform)}<span>${escapeHtml(item.name)}</span></a>`).join("")}</div>` : ""}
+      ${getSimpleSocialNetworks(settings).length ? `<div class="social-public-links">${getSimpleSocialNetworks(settings).map(item => `<a class="social-public-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${socialLogoMarkup(item.platform)}<span>${escapeHtml(item.name)}</span></a>`).join("")}</div>` : ""}
       <div class="intro-prompt-card">Primeiro, escolha o que você procura:</div>
     `);
     const visibility = settings.menuVisibility || defaultSettings.menuVisibility;
@@ -5064,6 +5108,22 @@
   let socialNetworksDraft = [];
   let editingSocialId = null;
 
+  function socialDiscountsGloballyEnabled(){
+    const control = $("#settingDiscountEnabled");
+    return control ? control.checked : getSettings().discountEnabled !== false;
+  }
+
+  function updateGlobalSocialDiscountUI(){
+    const enabled = socialDiscountsGloballyEnabled();
+    const control = $("#socialDiscountGlobalControl");
+    const status = $("#socialDiscountGlobalStatus");
+    if(control) control.classList.toggle("is-off", !enabled);
+    if(status) status.textContent = enabled ? "DESCONTOS ATIVADOS" : "DESCONTOS DESATIVADOS";
+    const campaignToggle = $("#socialDiscountEnabled");
+    if(campaignToggle) campaignToggle.disabled = !enabled;
+    updateSocialEditorVisibility();
+  }
+
   function socialEditorValue(){
     const platform = $("#socialPlatform")?.value || "youtube";
     return normalizeSocialNetwork({
@@ -5087,7 +5147,10 @@
     if(preview) preview.innerHTML = `${socialLogoMarkup(platform)}<div><strong>${escapeHtml(meta.label)}</strong><span>${escapeHtml(meta.helper)} • logo automático</span></div>`;
     const custom = $("#socialAction")?.value === "custom";
     if($("#socialCustomActionField")) $("#socialCustomActionField").hidden = !custom;
-    const discount = $("#socialDiscountEnabled")?.checked === true;
+    const globalDiscount = socialDiscountsGloballyEnabled();
+    const discountControl = $("#socialDiscountEnabled");
+    if(discountControl) discountControl.disabled = !globalDiscount;
+    const discount = globalDiscount && discountControl?.checked === true;
     if($("#socialDiscountTypeField")) $("#socialDiscountTypeField").hidden = !discount;
     if($("#socialDiscountValueField")) $("#socialDiscountValueField").hidden = !discount;
     if($("#socialDiscountValue") && $("#socialDiscountType")){
@@ -5099,8 +5162,9 @@
     const platform = socialPlatformMeta(item.platform);
     const actionText = socialActionText(item);
     const discountText = socialDiscountText(item);
+    const discountActive = socialDiscountsGloballyEnabled() && item.discountEnabled && item.discountValue > 0;
     return `<div class="social-preview-top">${socialLogoMarkup(item.platform)}<div><h4>${escapeHtml(platform.label)} — ${escapeHtml(item.name || "Nome do perfil")}</h4><p>${escapeHtml(item.url || "Informe o link para abrir a rede")}</p></div></div>
-      ${item.discountEnabled && item.discountValue > 0
+      ${discountActive
         ? `<p><strong>🎁 Ganhe ${escapeHtml(discountText)}</strong></p><div class="social-preview-steps"><strong>Como receber:</strong><br>1. Abra o ${escapeHtml(platform.label)}.<br>2. ${escapeHtml(actionText)}.<br>3. Volte para a atendente.<br>4. Confirme que concluiu e envie o print no WhatsApp.</div><div class="social-preview-buttons"><span class="primary">Abrir ${escapeHtml(platform.label)}</span><span>✓ Confirmar que concluí</span><span>Continuar sem desconto</span></div>`
         : `<p>Esta rede aparecerá como um botão simples, sem oferecer desconto.</p><div class="social-preview-buttons"><span class="primary">Abrir ${escapeHtml(platform.label)}</span></div>`}`;
   }
@@ -5152,7 +5216,7 @@
       return `<article class="social-config-card ${item.active ? "" : "is-off"}" data-social-id="${escapeHtml(item.id)}">
         ${socialLogoMarkup(item.platform)}
         <div class="social-card-copy">
-          <div class="social-card-title"><strong>${escapeHtml(platform.label)} — ${escapeHtml(item.name || "Sem nome")}</strong><span class="social-chip ${item.active ? "on" : "off"}">${item.active ? "ATIVA" : "DESATIVADA"}</span>${item.discountEnabled && item.discountValue > 0 ? `<span class="social-chip discount">${escapeHtml(socialDiscountText(item))}</span>` : ""}</div>
+          <div class="social-card-title"><strong>${escapeHtml(platform.label)} — ${escapeHtml(item.name || "Sem nome")}</strong><span class="social-chip ${item.active ? "on" : "off"}">${item.active ? "ATIVA" : "DESATIVADA"}</span>${item.discountEnabled && item.discountValue > 0 ? `<span class="social-chip discount">${socialDiscountsGloballyEnabled() ? escapeHtml(socialDiscountText(item)) : "DESCONTO PAUSADO"}</span>` : ""}</div>
           <p>${escapeHtml(socialActionText(item))}</p>
           <p>${escapeHtml(item.url || "Link não informado")}</p>
         </div>
@@ -5166,6 +5230,11 @@
     }).join("");
   }
 
+  $("#settingDiscountEnabled")?.addEventListener("change", () => {
+    updateGlobalSocialDiscountUI();
+    renderSocialNetworkManager();
+    toast(socialDiscountsGloballyEnabled() ? "Descontos por redes sociais ativados. Salve para publicar." : "Descontos desativados. As redes continuarão visíveis sem desconto após salvar.");
+  });
   $("#addSocialNetwork")?.addEventListener("click", () => openSocialEditor());
   $("#cancelSocialNetwork")?.addEventListener("click", closeSocialEditor);
   $("#socialPlatform")?.addEventListener("change", () => {
@@ -5353,9 +5422,11 @@
     renderOrderModulesManager();
     renderOrderModuleEditor();
     socialNetworksDraft = (settings.socialNetworks || []).map(item => clone(item));
+    $("#settingDiscountEnabled").checked = settings.discountEnabled !== false;
     editingSocialId = null;
     closeSocialEditor();
     renderSocialNetworkManager();
+    updateGlobalSocialDiscountUI();
     $("#settingResellerPlan").value = settings.resellerPlan;
     $("#settingWelcome").value = settings.welcome;
     $("#settingDeveloperShow").checked = settings.developerShow !== false;
@@ -5649,7 +5720,7 @@
       personalPrice5: Math.max(0, Number(String($("#settingPersonalPrice5").value || defaultSettings.personalPrice5).replace(",", "."))),
       orderModules: (currentSettings.orderModules || []).filter(module => module.id !== "order_padaria_demo"),
       socialNetworks: socialNetworksDraft.map(normalizeSocialNetwork),
-      discountEnabled: socialNetworksDraft.some(item => item.active && item.discountEnabled && Number(item.discountValue || 0) > 0),
+      discountEnabled: $("#settingDiscountEnabled").checked,
       discountAmount: (() => { const first = socialNetworksDraft.find(item => item.active && item.discountEnabled && item.discountType === "fixed" && Number(item.discountValue || 0) > 0); return first ? Number(first.discountValue) : 0; })(),
       emulatorFee: Math.max(0, Number(String($("#settingEmulatorFee").value || defaultSettings.emulatorFee).replace(",", "."))),
       resellerMonthlyFee: Math.max(0, Number(String($("#settingResellerMonthlyFee").value || defaultSettings.resellerMonthlyFee).replace(",", "."))),
