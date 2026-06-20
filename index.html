@@ -1249,6 +1249,47 @@
       .order-qty{grid-template-columns:38px minmax(90px,1fr) 38px}
     }
 
+
+
+    /* JC-APK — correção final do campo de digitação em celulares */
+    :root{--jc-viewport-height:100dvh}
+    .composer,.composer-panel,#messageInput{pointer-events:auto}
+    #messageInput{
+      position:relative;
+      z-index:8;
+      -webkit-user-select:text;
+      user-select:text;
+      touch-action:manipulation;
+      caret-color:#111;
+      font-size:16px!important;
+    }
+    @media(max-width:760px){
+      html,body{height:100%;overscroll-behavior:none}
+      .layout{
+        height:calc(var(--jc-viewport-height,100dvh) - 68px)!important;
+        min-height:0!important;
+        overflow:hidden!important;
+      }
+      .chat-shell{height:100%!important;min-height:0!important}
+      .composer{
+        position:relative!important;
+        bottom:auto!important;
+        flex:0 0 auto;
+        padding-bottom:max(10px,env(safe-area-inset-bottom))!important;
+        z-index:20!important;
+      }
+      .composer-panel{overflow:visible!important;min-width:0}
+      #messageInput{
+        display:block!important;
+        min-height:56px!important;
+        max-height:120px!important;
+        padding:15px 14px!important;
+        line-height:1.35!important;
+        border-radius:0 0 16px 16px!important;
+        background:rgba(255,255,255,.96)!important;
+      }
+      body.jc-keyboard-open .topbar{position:relative}
+    }
 </style>
 </head>
 <body>
@@ -1290,7 +1331,7 @@
       <div class="composer" id="composer">
         <div class="composer-panel" id="composerPanel">
           <div class="composer-hint" id="composerHint" tabindex="0">Clique no campo branco para escrever</div>
-          <textarea id="messageInput" rows="1" placeholder="Digite sua resposta..."></textarea>
+          <textarea id="messageInput" rows="1" placeholder="Digite sua resposta..." inputmode="text" enterkeyhint="send" autocapitalize="sentences" autocomplete="off" spellcheck="true" aria-label="Digite sua resposta"></textarea>
         </div>
         <button class="send" id="sendBtn" aria-label="Enviar">➤</button>
       </div>
@@ -2127,15 +2168,39 @@
   const composerHint = $("#composerHint");
   const composerPanel = $("#composerPanel");
 
-  composerHint?.addEventListener("click", () => input.focus());
+  function syncMobileViewport(){
+    const height=Math.max(320,Math.round(window.visualViewport?.height||window.innerHeight||720));
+    document.documentElement.style.setProperty("--jc-viewport-height",`${height}px`);
+  }
+  function focusMessageInput(){
+    if(!input || input.disabled) return;
+    try{input.focus({preventScroll:true});}catch(e){input.focus();}
+    requestAnimationFrame(()=>input.scrollIntoView({block:"nearest",inline:"nearest"}));
+  }
+  syncMobileViewport();
+  composerHint?.addEventListener("click", focusMessageInput);
+  composerHint?.addEventListener("touchend", (event) => {event.preventDefault();focusMessageInput();},{passive:false});
   composerHint?.addEventListener("keydown", (event) => {
     if(event.key === "Enter" || event.key === " "){
       event.preventDefault();
-      input.focus();
+      focusMessageInput();
     }
   });
   composerPanel?.addEventListener("click", (event) => {
-    if(event.target === composerPanel) input.focus();
+    if(event.target !== input) focusMessageInput();
+  });
+  composer?.addEventListener("click", (event) => {
+    if(event.target.closest("#sendBtn")) return;
+    focusMessageInput();
+  });
+  input?.addEventListener("focus",()=>{
+    document.body.classList.add("jc-keyboard-open");
+    syncMobileViewport();
+    setTimeout(()=>{input.scrollIntoView({block:"nearest"});scrollChatToBottom("auto");},80);
+  });
+  input?.addEventListener("blur",()=>{
+    document.body.classList.remove("jc-keyboard-open");
+    setTimeout(syncMobileViewport,80);
   });
 
   function keepMilaSpeaking(root=document){
@@ -2632,7 +2697,9 @@
     chat.innerHTML = "";
     composer.classList.remove("disabled");
     input.disabled = false;
+    input.removeAttribute("disabled");
     input.placeholder = "Digite sua resposta...";
+    input.style.pointerEvents = "auto";
     setStatus("Escolhendo serviço");
     const settings = getSettings();
     const mobileDirectOpening = window.matchMedia("(max-width: 600px)").matches;
@@ -4845,10 +4912,15 @@
 
   /* Cada nova mensagem já chama a rolagem. Evita observar todas as mudanças
      internas, pois isso fazia a conversa pular ao desativar botões e abrir o teclado. */
-  window.addEventListener("orientationchange", () => setTimeout(() => scrollChatToBottom("auto"), 180));
+  window.addEventListener("resize",syncMobileViewport,{passive:true});
+  window.addEventListener("orientationchange", () => setTimeout(() => {syncMobileViewport();scrollChatToBottom("auto");}, 180));
 
   if(window.visualViewport){
-    window.visualViewport.addEventListener("resize", () => setTimeout(() => scrollChatToBottom("auto"), 80));
+    window.visualViewport.addEventListener("resize", () => {
+      syncMobileViewport();
+      if(document.activeElement===input)setTimeout(()=>{input.scrollIntoView({block:"nearest"});scrollChatToBottom("auto");},60);
+    },{passive:true});
+    window.visualViewport.addEventListener("scroll",syncMobileViewport,{passive:true});
   }
 
   function formatDate(value){
